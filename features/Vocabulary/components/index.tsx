@@ -232,21 +232,7 @@ const VocabCards = () => {
         </div>
       )}
 
-      {/* Show progress indicator if user has data but no mastered sets yet */}
-      {/* 
-      {hasProgressData && masteredCount === 0 && (
-        <div className="mx-4 px-4 py-3 rounded-xl bg-[var(--card-color)] border-2 border-[var(--border-color)]">
-          <p className="text-sm text-[var(--secondary-color)]">
-            You have progress data for{' '}
-            {Object.keys(allTimeStats.characterMastery).length} words. Keep
-            practicing to master complete sets! (90%+ accuracy, 10+ attempts per
-            word)
-          </p>
-        </div>
-      )}
- */}
       {chunkArray(filteredVocabSets, numColumns).map((rowSets, rowIndex) => {
-        // Get the actual set numbers from the filtered sets
         const firstSetNumber = rowSets[0]?.name.match(/\d+/)?.[0] || '1';
         const lastSetNumber =
           rowSets[rowSets.length - 1]?.name.match(/\d+/)?.[0] || firstSetNumber;

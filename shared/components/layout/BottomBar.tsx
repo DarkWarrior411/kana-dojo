@@ -133,15 +133,15 @@ const MobileBottomBar = () => {
             </React.Fragment>
           );
         })}
-        <span className='hidden lg:inline-block text-sm text-[var(--secondary-color)] select-none'>
-          ~
-        </span>
-        <span className='hidden lg:inline-block text-xs text-[var(--secondary-color)]'>
-          made with ❤️ by the community
-        </span>
       </div>
 
       <div className='flex items-center gap-2 text-xs text-[var(--secondary-color)]'>
+        <span className='hidden lg:inline-block text-xs text-[var(--secondary-color)]'>
+          made with ❤️ by the community
+        </span>
+        <span className='hidden lg:inline-block text-sm text-[var(--secondary-color)] select-none'>
+          ~
+        </span>
         {infoItems.map((item, idx) => {
           const isVersionItem = idx === infoItems.length - 1;
           const content = (

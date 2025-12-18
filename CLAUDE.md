@@ -55,6 +55,40 @@ git add -A && git commit -m "feat(kana): add dakuon character support" -m "Added
 
 ---
 
+## ⚠️ CRITICAL: Code Verification
+
+**NEVER run `npm run build` for code verification. It is slow (1-2 minutes) and unnecessary.**
+
+### ✅ Use Fast Verification Instead
+
+**Always use `npm run check` for verification** (~10-30 seconds):
+
+```bash
+cmd /c "npm run check"    # TypeScript + ESLint combined
+```
+
+**Or run separately:**
+
+```bash
+cmd /c "npx tsc --noEmit"  # TypeScript type checking only
+cmd /c "npm run lint"      # ESLint code quality checks
+```
+
+### When to Use Each Command
+
+- ✅ **`npm run check`** - Use for all code verification during development
+- ✅ **`npm run lint`** - Quick ESLint-only checks
+- ✅ **`npx tsc --noEmit`** - Quick type checking only
+- ❌ **`npm run build`** - ONLY for final pre-deployment validation or testing actual production bundle
+
+**The full build is unnecessary because:**
+
+1. TypeScript already validates all types during `tsc --noEmit`
+2. ESLint catches code quality issues, unused variables, etc.
+3. Build adds 1-2 minutes of static page generation with no additional validation
+
+---
+
 ## Project Overview
 
 **KanaDojo** is a modern Japanese learning platform built with Next.js 15, React 19, and TypeScript. It provides an aesthetic, minimalist, and highly customizable environment for mastering Hiragana, Katakana, Kanji, and Vocabulary through gamified training modes.

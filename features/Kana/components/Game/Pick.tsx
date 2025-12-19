@@ -300,13 +300,13 @@ const PickGame = ({ isHidden }: PickGameProps) => {
       recordDifficultyCorrect();
     },
     [
-      speedStopwatch,
       addCorrectAnswerTime,
       playCorrect,
       addCharacterToHistory,
       incrementCharacterScore,
       incrementCorrectAnswers,
       score,
+      setScore,
       triggerCrazyMode,
       adaptiveSelector,
       decideNextMode,
@@ -345,6 +345,7 @@ const PickGame = ({ isHidden }: PickGameProps) => {
       incrementCharacterScore,
       incrementWrongAnswers,
       score,
+      setScore,
       triggerCrazyMode,
       adaptiveSelector,
       recordWrongAnswer,

@@ -211,15 +211,13 @@ const QuickSelectModal = ({
                       playClick();
                       onToggleSet(set.name);
                     }}
-                    colorScheme={isSelected ? 'main' : undefined}
-                    borderColorScheme={isSelected ? 'main' : undefined}
+                    colorScheme={isSelected ? 'main' : 'secondary'}
+                    borderColorScheme={isSelected ? 'main' : 'secondary'}
                     borderRadius='3xl'
-                    borderBottomThickness={isSelected ? 10 : 0}
+                    borderBottomThickness={isSelected ? 10 : 8}
                     className={clsx(
                       'flex flex-col items-center gap-2 p-3 sm:p-4',
-                      isSelected
-                        ? 'order-first'
-                        : 'border-1 border-[var(--border-color)] bg-[var(--card-color)] text-[var(--secondary-color)]'
+                      isSelected ? 'order-first' : 'opacity-60'
                     )}
                   >
                     {isSelected ? (
@@ -230,7 +228,7 @@ const QuickSelectModal = ({
                     ) : (
                       <Circle
                         size={18}
-                        className='flex-shrink-0 text-[var(--main-color)]'
+                        className='flex-shrink-0 text-[var(--background-color)]'
                       />
                     )}
                     <span className='text-center text-xs font-medium sm:text-sm'>

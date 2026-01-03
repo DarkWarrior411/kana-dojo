@@ -444,7 +444,7 @@ const WordBuildingGame = ({
         className={clsx(
           'w-[100vw]',
           'border-t-2 border-[var(--border-color)] bg-[var(--card-color)]',
-          'absolute bottom-0 z-10 px-6 py-6 md:bottom-6 md:px-12 md:py-10',
+          'absolute bottom-0 z-10 px-6 py-6 md:bottom-6 md:px-12',
           'flex flex-col items-center gap-6 md:flex-row md:items-center md:justify-center md:gap-0'
         )}
       >

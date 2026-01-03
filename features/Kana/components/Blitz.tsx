@@ -6,7 +6,7 @@ import useStatsStore from '@/features/Progress/store/useStatsStore';
 import { generateKanaQuestion } from '@/features/Kana/lib/generateKanaQuestions';
 import type { KanaCharacter } from '@/features/Kana/lib/generateKanaQuestions';
 import { flattenKanaGroups } from '@/features/Kana/lib/flattenKanaGroup';
-import { getKanaGroupNames } from '@/features/Kana/lib/kanaFormatting';
+import { getSelectionLabels } from '@/shared/lib/selectionFormatting';
 import Blitz, { type BlitzConfig } from '@/shared/components/Blitz';
 
 export default function BlitzKana() {
@@ -22,7 +22,7 @@ export default function BlitzKana() {
 
   // Convert indices to group names for display (e.g., "か-group")
   const selectedKanaGroups = React.useMemo(
-    () => getKanaGroupNames(kanaGroupIndices).kanaGroupNamesFull,
+    () => getSelectionLabels('kana', kanaGroupIndices).full.split(', '),
     [kanaGroupIndices]
   );
 

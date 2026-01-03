@@ -7,6 +7,7 @@ import useVocabStore, {
 import useStatsStore from '@/features/Progress/store/useStatsStore';
 import Blitz, { type BlitzConfig } from '@/shared/components/Blitz';
 import FuriganaText from '@/shared/components/text/FuriganaText';
+import { getSelectionLabels } from '@/shared/lib/selectionFormatting';
 
 export default function BlitzVocab() {
   const selectedVocabObjs = useVocabStore(state => state.selectedVocabObjs);
@@ -25,6 +26,10 @@ export default function BlitzVocab() {
     resetTimedVocabStats
   } = useStatsStore();
 
+  const formattedSets = React.useMemo(() => {
+    return getSelectionLabels('vocabulary', selectedVocabSets).full.split(', ');
+  }, [selectedVocabSets]);
+
   const config: BlitzConfig<IVocabObj> = {
     dojoType: 'vocabulary',
     dojoLabel: 'Vocabulary',
@@ -32,7 +37,7 @@ export default function BlitzVocab() {
     goalTimerContext: 'Vocabulary Blitz',
     initialGameMode: selectedGameModeVocab === 'Type' ? 'Type' : 'Pick',
     items: selectedVocabObjs,
-    selectedSets: selectedVocabSets,
+    selectedSets: formattedSets,
     generateQuestion: items => items[Math.floor(Math.random() * items.length)],
     // Reverse mode: show meaning, answer is Japanese word
     // Normal mode: show Japanese word, answer is meaning

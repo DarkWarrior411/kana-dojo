@@ -5,7 +5,7 @@ import useVocabStore, {
   type IVocabObj
 } from '@/features/Vocabulary/store/useVocabStore';
 import Gauntlet, { type GauntletConfig } from '@/shared/components/Gauntlet';
-import { formatLevelsAsRanges } from '@/shared/lib/helperFunctions';
+import { getSelectionLabels } from '@/shared/lib/selectionFormatting';
 import FuriganaText from '@/shared/components/text/FuriganaText';
 
 interface GauntletVocabProps {
@@ -21,11 +21,7 @@ const GauntletVocab: React.FC<GauntletVocabProps> = ({ onCancel }) => {
 
   // Format selected sets for display
   const formattedSets = React.useMemo(() => {
-    if (selectedVocabSets.length === 0) return [];
-    const rangeStr = formatLevelsAsRanges(selectedVocabSets);
-    return rangeStr
-      .split(', ')
-      .map(r => `${r.includes('-') ? 'Levels' : 'Level'} ${r}`);
+    return getSelectionLabels('vocabulary', selectedVocabSets).full.split(', ');
   }, [selectedVocabSets]);
 
   const config: GauntletConfig<IVocabObj> = {

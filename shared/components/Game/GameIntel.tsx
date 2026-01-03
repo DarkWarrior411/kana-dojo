@@ -8,8 +8,7 @@ import useVocabStore from '@/features/Vocabulary/store/useVocabStore';
 import useKanaStore from '@/features/Kana/store/useKanaStore';
 import { usePathname } from 'next/navigation';
 import { removeLocaleFromPath } from '@/shared/lib/pathUtils';
-import { formatLevelsAsRanges } from '@/shared/lib/helperFunctions';
-import { getKanaGroupNames } from '@/features/Kana/lib/kanaFormatting';
+import { getSelectionLabels } from '@/shared/lib/selectionFormatting';
 
 const GameIntel = memo(({ gameMode: _gameMode }: { gameMode: string }) => {
   void _gameMode;
@@ -21,45 +20,17 @@ const GameIntel = memo(({ gameMode: _gameMode }: { gameMode: string }) => {
   const selectedVocabSets = useVocabStore(state => state.selectedVocabSets);
   const kanaGroupIndices = useKanaStore(state => state.kanaGroupIndices);
 
-  const { kanaGroupNamesFull, kanaGroupNamesCompact } = useMemo(
-    () => getKanaGroupNames(kanaGroupIndices),
-    [kanaGroupIndices]
-  );
-
-  const { formattedSelectionFull, formattedSelectionCompact } = useMemo(() => {
-    if (trainingDojo === 'kana') {
-      return {
-        formattedSelectionFull: kanaGroupNamesFull.join(', '),
-        formattedSelectionCompact: kanaGroupNamesCompact.join(', ')
-      };
-    }
-
-    const sets =
-      trainingDojo === 'kanji' ? selectedKanjiSets : selectedVocabSets;
-    if (sets.length === 0) {
-      return {
-        formattedSelectionFull: 'None',
-        formattedSelectionCompact: 'None'
-      };
-    }
-
-    const ranges = formatLevelsAsRanges(sets);
-    const full = ranges
-      .split(', ')
-      .map(r => `${r.includes('-') ? 'Levels' : 'Level'} ${r}`)
-      .join(', ');
-
-    return {
-      formattedSelectionFull: full,
-      formattedSelectionCompact: ranges
-    };
-  }, [
-    trainingDojo,
-    kanaGroupNamesFull,
-    kanaGroupNamesCompact,
-    selectedKanjiSets,
-    selectedVocabSets
-  ]);
+  const { full: formattedSelectionFull, compact: formattedSelectionCompact } =
+    useMemo(() => {
+      const type = trainingDojo as 'kana' | 'kanji' | 'vocabulary';
+      const selection =
+        type === 'kana'
+          ? kanaGroupIndices
+          : type === 'kanji'
+            ? selectedKanjiSets
+            : selectedVocabSets;
+      return getSelectionLabels(type, selection);
+    }, [trainingDojo, kanaGroupIndices, selectedKanjiSets, selectedVocabSets]);
 
   const selectionLabel =
     trainingDojo === 'kana' ? 'Selected Groups:' : 'Selected Levels:';

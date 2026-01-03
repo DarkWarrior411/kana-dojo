@@ -6,6 +6,7 @@ import useKanjiStore, {
 } from '@/features/Kanji/store/useKanjiStore';
 import useStatsStore from '@/features/Progress/store/useStatsStore';
 import Blitz, { type BlitzConfig } from '@/shared/components/Blitz';
+import { getSelectionLabels } from '@/shared/lib/selectionFormatting';
 import { Random } from 'random-js';
 
 const random = new Random();
@@ -27,6 +28,10 @@ export default function BlitzKanji() {
     resetTimedKanjiStats
   } = useStatsStore();
 
+  const formattedSets = React.useMemo(() => {
+    return getSelectionLabels('kanji', selectedKanjiSets).full.split(', ');
+  }, [selectedKanjiSets]);
+
   const config: BlitzConfig<IKanjiObj> = {
     dojoType: 'kanji',
     dojoLabel: 'Kanji',
@@ -34,7 +39,7 @@ export default function BlitzKanji() {
     goalTimerContext: 'Kanji Blitz',
     initialGameMode: selectedGameModeKanji === 'Type' ? 'Type' : 'Pick',
     items: selectedKanjiObjs,
-    selectedSets: selectedKanjiSets,
+    selectedSets: formattedSets,
     generateQuestion: items => items[random.integer(0, items.length - 1)],
     // Reverse mode: show meaning, answer is kanji
     // Normal mode: show kanji, answer is meaning

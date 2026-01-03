@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import useKanaStore from '@/features/Kana/store/useKanaStore';
 import useKanjiStore from '@/features/Kanji/store/useKanjiStore';
 import useVocabStore from '@/features/Vocabulary/store/useVocabStore';
-import { getKanaGroupNames } from '@/features/Kana/lib/kanaFormatting';
+import { getSelectionLabels } from '@/shared/lib/selectionFormatting';
 import {
   MousePointerClick,
   Keyboard,
@@ -16,7 +16,7 @@ import clsx from 'clsx';
 import { useClick } from '@/shared/hooks/useAudio';
 import { useShallow } from 'zustand/react/shallow';
 import { Link, useRouter } from '@/core/i18n/routing';
-import { formatLevelsAsRanges } from '@/shared/lib/helperFunctions';
+
 import { ActionButton } from '@/shared/components/ui/ActionButton';
 import { cn } from '@/shared/lib/utils';
 
@@ -91,11 +91,18 @@ const GameModes = ({
       }))
     );
 
-  // Convert kana indices to display names
-  const { kanaGroupNamesFull, kanaGroupNamesCompact } = useMemo(
-    () => getKanaGroupNames(kanaGroupIndices),
-    [kanaGroupIndices]
-  );
+  // Get formatted selection labels
+  const { full: kanaGroupNamesFull, compact: kanaGroupNamesCompact } =
+    useMemo(() => {
+      const type = currentDojo as 'kana' | 'kanji' | 'vocabulary';
+      const selection =
+        type === 'kana'
+          ? kanaGroupIndices
+          : type === 'kanji'
+            ? selectedKanjiSets
+            : selectedVocabSets;
+      return getSelectionLabels(type, selection);
+    }, [currentDojo, kanaGroupIndices, selectedKanjiSets, selectedVocabSets]);
 
   const selectedGameMode =
     currentDojo === 'kana'
@@ -211,10 +218,8 @@ const GameModes = ({
           {/* Selected Levels */}
           <SelectedLevelsCard
             currentDojo={currentDojo}
-            kanaGroupNamesCompact={kanaGroupNamesCompact}
-            kanaGroupNamesFull={kanaGroupNamesFull}
-            selectedKanjiSets={selectedKanjiSets}
-            selectedVocabSets={selectedVocabSets}
+            fullLabel={kanaGroupNamesFull}
+            compactLabel={kanaGroupNamesCompact}
           />
 
           {/* Game Mode Cards */}
@@ -411,41 +416,14 @@ const GameModes = ({
 // Sub-component for displaying selected levels/groups
 function SelectedLevelsCard({
   currentDojo,
-  kanaGroupNamesCompact,
-  kanaGroupNamesFull,
-  selectedKanjiSets,
-  selectedVocabSets
+  fullLabel,
+  compactLabel
 }: {
   currentDojo: string;
-  kanaGroupNamesCompact: string[];
-  kanaGroupNamesFull: string[];
-  selectedKanjiSets: string[];
-  selectedVocabSets: string[];
+  fullLabel: string;
+  compactLabel: string;
 }) {
   const isKana = currentDojo === 'kana';
-  const isKanji = currentDojo === 'kanji';
-
-  const formatCompact = () => {
-    if (isKana) {
-      return kanaGroupNamesCompact.length > 0
-        ? kanaGroupNamesCompact.join(', ')
-        : 'None';
-    }
-    const sets = isKanji ? selectedKanjiSets : selectedVocabSets;
-    return formatLevelsAsRanges(sets);
-  };
-
-  const formatFull = () => {
-    if (isKana)
-      return kanaGroupNamesFull.length ? kanaGroupNamesFull.join(', ') : 'None';
-    const sets = isKanji ? selectedKanjiSets : selectedVocabSets;
-    return sets.length
-      ? formatLevelsAsRanges(sets)
-          .split(', ')
-          .map(r => `${r.includes('-') ? 'Levels' : 'Level'} ${r}`)
-          .join(', ')
-      : 'None';
-  };
 
   return (
     <div className='rounded-xl bg-[var(--card-color)] p-4'>
@@ -460,10 +438,10 @@ function SelectedLevelsCard({
           </span>
         </div>
         <span className='text-sm break-words text-[var(--secondary-color)] md:hidden'>
-          {formatCompact()}
+          {compactLabel}
         </span>
         <span className='hidden text-sm break-words text-[var(--secondary-color)] md:inline'>
-          {formatFull()}
+          {fullLabel}
         </span>
       </div>
     </div>

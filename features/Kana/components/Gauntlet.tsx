@@ -5,7 +5,7 @@ import useKanaStore from '@/features/Kana/store/useKanaStore';
 import { generateKanaQuestion } from '@/features/Kana/lib/generateKanaQuestions';
 import type { KanaCharacter } from '@/features/Kana/lib/generateKanaQuestions';
 import { flattenKanaGroups } from '@/features/Kana/lib/flattenKanaGroup';
-import { getKanaGroupNames } from '@/features/Kana/lib/kanaFormatting';
+import { getSelectionLabels } from '@/shared/lib/selectionFormatting';
 import Gauntlet, { type GauntletConfig } from '@/shared/components/Gauntlet';
 
 interface GauntletKanaProps {
@@ -25,7 +25,7 @@ const GauntletKana: React.FC<GauntletKanaProps> = ({ onCancel }) => {
 
   // Convert indices to group names for display
   const selectedKanaGroups = React.useMemo(
-    () => getKanaGroupNames(kanaGroupIndices).kanaGroupNamesFull,
+    () => getSelectionLabels('kana', kanaGroupIndices).full.split(', '),
     [kanaGroupIndices]
   );
 

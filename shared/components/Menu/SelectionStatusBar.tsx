@@ -4,14 +4,13 @@ import clsx from 'clsx';
 import useKanjiStore from '@/features/Kanji/store/useKanjiStore';
 import useVocabStore from '@/features/Vocabulary/store/useVocabStore';
 import useKanaStore from '@/features/Kana/store/useKanaStore';
-import { getKanaGroupNames } from '@/features/Kana/lib/kanaFormatting';
+import { getSelectionLabels } from '@/shared/lib/selectionFormatting';
 import { usePathname } from 'next/navigation';
 import { removeLocaleFromPath } from '@/shared/lib/pathUtils';
 import { useClick } from '@/shared/hooks/useAudio';
 import { CircleCheck, Trash } from 'lucide-react';
 import { ActionButton } from '@/shared/components/ui/ActionButton';
 import { AnimatePresence, motion } from 'framer-motion';
-import { formatLevelsAsRanges } from '@/shared/lib/helperFunctions';
 import { cn } from '@/shared/lib/utils';
 
 type ContentType = 'kana' | 'kanji' | 'vocabulary';
@@ -35,10 +34,22 @@ const SelectionStatusBar = () => {
   // Vocab store
   const { selectedVocabSets, clearVocabObjs, clearVocabSets } = useVocabStore();
 
-  const { kanaGroupNamesFull, kanaGroupNamesCompact } = useMemo(
-    () => getKanaGroupNames(kanaGroupIndices),
-    [kanaGroupIndices]
-  );
+  const { full: formattedSelectionFull, compact: formattedSelectionCompact } =
+    useMemo(() => {
+      const selection = isKana
+        ? kanaGroupIndices
+        : isKanji
+          ? selectedKanjiSets
+          : selectedVocabSets;
+      return getSelectionLabels(contentType, selection);
+    }, [
+      contentType,
+      isKana,
+      isKanji,
+      kanaGroupIndices,
+      selectedKanjiSets,
+      selectedVocabSets
+    ]);
 
   const hasSelection = isKana
     ? kanaGroupIndices.length > 0
@@ -117,36 +128,6 @@ const SelectionStatusBar = () => {
       }
     };
   }, []);
-
-  // For kanji/vocab: sort by set number
-  const selectedSets = isKanji ? selectedKanjiSets : selectedVocabSets;
-  const sortedSets =
-    selectedSets.length > 0
-      ? selectedSets.sort((a, b) => {
-          const numA = parseInt(a.replace('Set ', ''));
-          const numB = parseInt(b.replace('Set ', ''));
-          return numA - numB;
-        })
-      : [];
-
-  // Compact: "1-5, 8-10" for kanji/vocab
-  const formattedSelectionCompact = isKana
-    ? kanaGroupNamesCompact.length > 0
-      ? kanaGroupNamesCompact.join(', ')
-      : 'None'
-    : formatLevelsAsRanges(sortedSets);
-
-  // Full: "Level 1-5, Level 8-10" for kanji/vocab
-  const formattedSelectionFull = isKana
-    ? kanaGroupNamesFull.length > 0
-      ? kanaGroupNamesFull.join(', ')
-      : 'None'
-    : sortedSets.length > 0
-      ? formatLevelsAsRanges(sortedSets)
-          .split(', ')
-          .map(range => `${range.includes('-') ? 'Levels' : 'Level'} ${range}`)
-          .join(', ')
-      : 'None';
 
   // Label text
   const selectionLabel = isKana ? 'Selected Groups:' : 'Selected Levels:';

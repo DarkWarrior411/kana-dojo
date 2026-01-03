@@ -5,7 +5,7 @@ import useKanjiStore, {
   type IKanjiObj
 } from '@/features/Kanji/store/useKanjiStore';
 import Gauntlet, { type GauntletConfig } from '@/shared/components/Gauntlet';
-import { formatLevelsAsRanges } from '@/shared/lib/helperFunctions';
+import { getSelectionLabels } from '@/shared/lib/selectionFormatting';
 import { Random } from 'random-js';
 
 const random = new Random();
@@ -23,11 +23,7 @@ const GauntletKanji: React.FC<GauntletKanjiProps> = ({ onCancel }) => {
 
   // Format selected sets for display
   const formattedSets = React.useMemo(() => {
-    if (selectedKanjiSets.length === 0) return [];
-    const rangeStr = formatLevelsAsRanges(selectedKanjiSets);
-    return rangeStr
-      .split(', ')
-      .map(r => `${r.includes('-') ? 'Levels' : 'Level'} ${r}`);
+    return getSelectionLabels('kanji', selectedKanjiSets).full.split(', ');
   }, [selectedKanjiSets]);
 
   const config: GauntletConfig<IKanjiObj> = {

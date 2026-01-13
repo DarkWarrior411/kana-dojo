@@ -1,0 +1,138 @@
+name: Close Issue on PR Merge
+
+on:
+  pull_request_target:
+    types: [closed]
+
+permissions:
+  issues: write
+  pull-requests: read
+
+jobs:
+  close-issue:
+    runs-on: ubuntu-latest
+    # Only run when PR is merged (not just closed)
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - name: Find and close related issue
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prTitle = context.payload.pull_request.title;
+            const prTitleLower = prTitle.toLowerCase();
+            const prBody = context.payload.pull_request.body || '';
+            const prNumber = context.payload.pull_request.number;
+            const prAuthor = context.payload.pull_request.user.login;
+
+            // Check if this is a community contribution
+            const isThemeContribution = prTitleLower.includes('theme');
+            const isFactContribution = prTitleLower.includes('fact');
+
+            if (!isThemeContribution && !isFactContribution) {
+              console.log('Not a community contribution PR, skipping');
+              return;
+            }
+
+            // First check if an issue was linked in the PR body
+            const issueMatch = prBody.match(/[Cc]loses?\s*#(\d+)|[Ff]ixes?\s*#(\d+)/);
+            let targetIssue = null;
+
+            if (issueMatch) {
+              targetIssue = parseInt(issueMatch[1] || issueMatch[2]);
+              console.log('Found linked issue in PR body: #' + targetIssue);
+            }
+
+            // If no issue linked, search for it
+            if (!targetIssue) {
+              console.log('No issue linked, searching for matching issue...');
+              
+              const { data: issues } = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: 'community',
+                state: 'open',
+                per_page: 100
+              });
+              
+              if (isThemeContribution) {
+                // Extract theme name from PR title
+                let themeName = null;
+                
+                const patterns = [
+                  /add\s+(.+?)\s+theme/i,
+                  /theme[:\s]+(.+)/i,
+                  /feat\(theme\)[:\s]+add\s+(.+)/i
+                ];
+                
+                for (const pattern of patterns) {
+                  const match = prTitle.match(pattern);
+                  if (match) {
+                    themeName = match[1].trim().replace(/theme$/i, '').trim();
+                    break;
+                  }
+                }
+                
+                if (themeName) {
+                  console.log('Looking for theme issue: ' + themeName);
+                  
+                  for (const issue of issues) {
+                    if (issue.title.includes('Add Theme:') && 
+                        issue.title.toLowerCase().includes(themeName.toLowerCase())) {
+                      targetIssue = issue.number;
+                      console.log('Found matching theme issue: #' + targetIssue);
+                      break;
+                    }
+                  }
+                }
+              } else if (isFactContribution) {
+                // Extract fact ID from PR title
+                const factIdMatch = prTitle.match(/#(\d+)/);
+                
+                if (factIdMatch) {
+                  const factId = factIdMatch[1];
+                  console.log('Looking for fact issue: #' + factId);
+                  
+                  for (const issue of issues) {
+                    if (issue.title.includes('Add Japan Fact #' + factId)) {
+                      targetIssue = issue.number;
+                      console.log('Found matching fact issue: #' + targetIssue);
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+
+            // Close the issue if found
+            if (targetIssue) {
+              try {
+                // Add a comment thanking the contributor
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: targetIssue,
+                  body: '## 🎉 This contribution has been merged!\n\n' +
+                    'Thank you @' + prAuthor + ' for your contribution!\n\n' +
+                    '**Merged in:** #' + prNumber + '\n\n' +
+                    'Your contribution is now live on the main branch. ありがとうございます! 🙏'
+                });
+                
+                // Close the issue
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: targetIssue,
+                  state: 'closed',
+                  state_reason: 'completed'
+                });
+                
+                console.log('Successfully closed issue #' + targetIssue);
+                
+              } catch (e) {
+                console.log('Error closing issue: ' + e.message);
+              }
+            } else {
+              console.log('No matching issue found to close');
+            }

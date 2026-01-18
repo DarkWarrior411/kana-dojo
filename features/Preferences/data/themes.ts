@@ -1118,7 +1118,24 @@ const baseThemeSets: BaseThemeGroup[] = [
         mainColor: 'oklch(62.0% 0.115 135.0 / 1)',
         secondaryColor: 'oklch(75.0% 0.075 90.0 / 1)'
       },
-
+      {
+        id: 'bento-box',
+        backgroundColor: 'oklch(22.0% 0.025 45.0 / 1)',
+        mainColor: 'oklch(70.0% 0.175 20.0 / 1)',
+        secondaryColor: 'oklch(75.0% 0.165 145.0 / 1)'
+      },
+      {
+        id: 'hanabi-festival',
+        backgroundColor: 'oklch(14.0% 0.055 275.0 / 1)',
+        mainColor: 'oklch(85.0% 0.200 35.0 / 1)',
+        secondaryColor: 'oklch(78.0% 0.215 310.0 / 1)'
+      },
+      {
+        id: 'shogun-gold',
+        backgroundColor: 'oklch(18.0% 0.035 80.0 / 1)',
+        mainColor: 'oklch(82.0% 0.155 85.0 / 1)',
+        secondaryColor: 'oklch(65.0% 0.180 30.0 / 1)'
+      },
     ]
   },
   {

@@ -1288,6 +1288,10 @@ const baseThemeSets: BaseThemeGroup[] = [
         secondaryColor: 'oklch(78.0% 0.135 70.0 / 1)',
       },
       {
+        id: 'plaza-snow',
+        backgroundColor: 'oklch(97.0% 0.006 240.0 / 1)',
+        mainColor: 'oklch(40.0% 0.035 260.0 / 1)',
+        secondaryColor: 'oklch(65.0% 0.120 220.0 / 1)'},{
         id: 'quiet-library',
         backgroundColor: 'oklch(92.0% 0.012 90.0 / 1)',
         mainColor: 'oklch(35.0% 0.085 255.0 / 1)',

@@ -348,7 +348,7 @@ jobs:
             const grammarBacklogPath = 'data/community-backlog/grammar-backlog.json';
             const animeQuotesBacklogPath = 'data/community-backlog/anime-quotes-backlog.json';
 
-            const themesSourcePath = 'features/Preferences/data/themes.ts';
+            const themesSourcePath = 'data/community-content/community-themes.json';
             const factsSourcePath = 'data/community-content/japan-facts.json';
             const proverbsSourcePath = 'data/community-content/japanese-proverbs.json';
             const triviaSourcePaths = {
@@ -429,9 +429,14 @@ jobs:
             }
 
             let themesSourceContent = '';
+            let existingThemes = [];
             if (fs.existsSync(themesSourcePath)) {
               try {
                 themesSourceContent = fs.readFileSync(themesSourcePath, 'utf8');
+                const parsedThemes = JSON.parse(themesSourceContent);
+                if (Array.isArray(parsedThemes)) {
+                  existingThemes = parsedThemes;
+                }
               } catch (e) {
                 console.log(`Could not read ${themesSourcePath}: ${e.message}`);
               }
@@ -473,8 +478,10 @@ jobs:
                   return false;
                 }
                 if (themesSourceContent) {
-                  const hasId = th.id && themesSourceContent.includes("id: '" + th.id + "'");
-                  const hasName = th.name && themesSourceContent.toLowerCase().includes(th.name.toLowerCase());
+                  const hasId = th.id && existingThemes.some(function(theme) { return theme.id === th.id; });
+                  const hasName = th.name && existingThemes.some(function(theme) {
+                    return (theme.name || '').toLowerCase() === th.name.toLowerCase();
+                  });
                   if (hasId || hasName) {
                     const themeIdx = themes.findIndex(function(ti) { return ti.id === th.id; });
                     themes[themeIdx].completed = true;

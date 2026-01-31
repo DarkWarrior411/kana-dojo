@@ -7,6 +7,12 @@
 # Get list of changed files
 CHANGED_FILES=""
 
+LAST_COMMIT_MESSAGE=$(git log -1 --pretty=%s 2>/dev/null)
+if [[ "$LAST_COMMIT_MESSAGE" == chore\(automation\):* ]]; then
+  echo "🔵 Automation commit detected; skipping build."
+  exit 0
+fi
+
 if [ -n "${VERCEL_GIT_PULL_REQUEST_BASE_BRANCH:-}" ] && [ -n "${VERCEL_GIT_COMMIT_SHA:-}" ]; then
   git fetch origin "${VERCEL_GIT_PULL_REQUEST_BASE_BRANCH}" --depth=1 2>/dev/null
   CHANGED_FILES=$(git diff "origin/${VERCEL_GIT_PULL_REQUEST_BASE_BRANCH}...${VERCEL_GIT_COMMIT_SHA}" --name-only 2>/dev/null)
@@ -18,6 +24,10 @@ fi
 
 if [ -z "$CHANGED_FILES" ]; then
   CHANGED_FILES=$(git diff HEAD~1 HEAD --name-only 2>/dev/null)
+fi
+
+if [ -z "$CHANGED_FILES" ]; then
+  CHANGED_FILES=$(git show --name-only --pretty="" HEAD 2>/dev/null)
 fi
 
 if [ -z "$CHANGED_FILES" ]; then
@@ -83,12 +93,14 @@ IGNORE_PATTERNS=(
   
   # Data and community content (non-build affecting)
   "^features/Preferences/data/themes\\.ts$"
+  "^data/community-content/community-themes\\.json$"
   "^data/community-content/japan-facts\\.json$"
   "^data/community-content/japanese-proverbs\\.json$"
   "^data/community-content/japanese-grammar\\.json$"
   "^data/community-content/anime-quotes\\.json$"
   "^data/community-content/japan-trivia\\.json$"
   "^data/community-content/japan-trivia-(easy|medium|hard)\\.json$"
+  "^data/community-backlog/automation-state\\.json$"
   "^data/community-content/"
   "^data/community-backlog/"
   "^data/.*\\.json$"

@@ -251,12 +251,13 @@ module.exports = {
       taskDescription: 'Add this beautiful new theme to KanaDojo!',
       detailsHeader: '### Theme Details',
       vibeLabel: '💡 **Vibe:**',
-      file: 'features/Preferences/data/themes.ts',
+      file: 'data/community-content/community-themes.json',
       itemType: 'theme',
       prTitle: 'feat(theme): add {name} theme',
       // Theme has unique step2 and step3
-      step2: 'Find the `Dark` themes section (around line 243)',
-      step3: 'Add this new theme to the array:',
+      step2:
+        'Add this new theme to the end of the array (before the closing `]`)',
+      step3: 'Make sure the JSON stays valid and properly formatted',
     },
     fact: {
       title:

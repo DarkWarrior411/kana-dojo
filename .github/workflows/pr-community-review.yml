@@ -212,28 +212,33 @@ jobs:
               validationType = 'theme';
               console.log('Validating theme contribution');
 
-              const allowed = ['features/Preferences/data/themes.ts'];
+              const allowed = ['data/community-content/community-themes.json'];
               const changed = reviewedFiles.map(function(f) { return f.filename; });
               const invalidFiles = changed.filter(function(p) { return !allowed.includes(p); });
               if (changed.length !== 1 || invalidFiles.length > 0) {
-                errors.push('Theme PRs must modify only features/Preferences/data/themes.ts');
+                errors.push('Theme PRs must modify only data/community-content/community-themes.json');
               }
               
               try {
-                const themesPath = 'pr-head/features/Preferences/data/themes.ts';
+                const themesPath = 'pr-head/data/community-content/community-themes.json';
                 if (!fs.existsSync(themesPath)) {
-                  errors.push('themes.ts file not found in PR');
+                  errors.push('community-themes.json file not found in PR');
                 } else {
                   const content = fs.readFileSync(themesPath, 'utf8');
-                  
-                  if (!content.includes('export const themes') && !content.includes('export default')) {
-                    errors.push('themes.ts appears to be malformed');
-                  }
-                  
-                  const oklchRegex = /oklch\(\s*[\d.]+%?\s+[\d.]+\s+[\d.]+/g;
-                  const oklchMatches = content.match(oklchRegex);
-                  if (!oklchMatches || oklchMatches.length === 0) {
-                    errors.push('No valid OKLCH colors found');
+                  try {
+                    const themes = JSON.parse(content);
+                    if (!Array.isArray(themes)) {
+                      errors.push('community-themes.json should be an array');
+                    } else {
+                      const invalidThemes = themes.filter(function(theme) {
+                        return !theme.id || !theme.backgroundColor || !theme.mainColor || !theme.secondaryColor;
+                      });
+                      if (invalidThemes.length > 0) {
+                        errors.push('Each theme must include id, backgroundColor, mainColor, and secondaryColor');
+                      }
+                    }
+                  } catch (parseErr) {
+                    errors.push(`Invalid JSON: ${parseErr.message}`);
                   }
                   
                   if (!targetIssue) {

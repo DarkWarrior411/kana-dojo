@@ -9,7 +9,9 @@
       "Nagasaki",
       "Kanazawa"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 2,
@@ -21,7 +23,8 @@
       "Skyrail",
       "Kairo"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 3,
@@ -33,7 +36,9 @@
       "July",
       "October"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 4,
@@ -45,7 +50,8 @@
       "Kintsugi",
       "Shodo"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 5,
@@ -57,7 +63,8 @@
       "Shikoku",
       "Kyushu"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": true
   },
   {
     "id": 6,
@@ -69,7 +76,8 @@
       "Rakugo",
       "Bunraku"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": true
   },
   {
     "id": 7,
@@ -81,7 +89,8 @@
       "Tofu",
       "Udon"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": true
   },
   {
     "id": 8,
@@ -93,7 +102,9 @@
       "Setsubun",
       "Obon"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 9,
@@ -105,7 +116,8 @@
       "Matsumoto Castle",
       "Nijo Castle"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 10,
@@ -117,7 +129,9 @@
       "Pacific Ocean",
       "Arctic Ocean"
     ],
-    "correctIndex": 2
+    "correctIndex": 2,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 11,
@@ -129,7 +143,9 @@
       "Ohayou",
       "Sayonara"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 12,
@@ -141,7 +157,9 @@
       "Kobe",
       "Nagoya"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 13,
@@ -153,7 +171,8 @@
       "Hakama",
       "Tabi"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 14,
@@ -165,7 +184,8 @@
       "Shikoku",
       "Kyushu"
     ],
-    "correctIndex": 3
+    "correctIndex": 3,
+    "issued": true
   },
   {
     "id": 15,
@@ -177,7 +197,8 @@
       "Mount Aso",
       "Mount Tate"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": true
   },
   {
     "id": 16,
@@ -189,7 +210,8 @@
       "Autumn",
       "Winter"
     ],
-    "correctIndex": 2
+    "correctIndex": 2,
+    "issued": true
   },
   {
     "id": 17,
@@ -201,7 +223,8 @@
       "Ramen-ya",
       "Kissa"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": true
   },
   {
     "id": 18,
@@ -213,7 +236,8 @@
       "Fukuoka",
       "Okayama"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 19,
@@ -225,7 +249,8 @@
       "Kendo",
       "Shodo"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 20,
@@ -237,7 +262,8 @@
       "Noh",
       "Ikebana"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 21,
@@ -249,7 +275,8 @@
       "Won",
       "Rupee"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": true
   },
   {
     "id": 22,
@@ -261,7 +288,8 @@
       "Kagoshima",
       "Takayama"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 23,
@@ -273,7 +301,8 @@
       "Manhwa",
       "Comique"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 24,
@@ -285,7 +314,8 @@
       "Hiroshima",
       "Naha"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 25,
@@ -297,7 +327,8 @@
       "Mahjong",
       "Reversi"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 26,
@@ -309,7 +340,9 @@
       "Sukiyaki",
       "Okonomiyaki"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 27,
@@ -321,7 +354,9 @@
       "Awaji",
       "Oki"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 28,
@@ -333,7 +368,8 @@
       "Shogatsu",
       "Hina Matsuri"
     ],
-    "correctIndex": 1
+    "correctIndex": 1,
+    "issued": true
   },
   {
     "id": 29,
@@ -345,7 +381,8 @@
       "Nagoya",
       "Sendai"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 30,
@@ -357,7 +394,8 @@
       "Kabuki",
       "Kyogen"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 31,
@@ -369,7 +407,8 @@
       "Sapporo",
       "Fukuoka"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 32,
@@ -381,7 +420,8 @@
       "Arigatou",
       "Oyasumi"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 33,
@@ -393,7 +433,8 @@
       "Turtle",
       "Deer"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 34,
@@ -405,7 +446,8 @@
       "Tonkatsu",
       "Okonomiyaki"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 35,
@@ -417,7 +459,8 @@
       "Kanji",
       "Romaji"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 36,
@@ -429,7 +472,9 @@
       "Judo",
       "Aikido"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 37,
@@ -441,7 +486,8 @@
       "Momiji",
       "Kiku"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 38,
@@ -453,7 +499,8 @@
       "Hiroshima",
       "Sendai"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 39,
@@ -465,7 +512,8 @@
       "Onigiri",
       "Mochi"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 40,
@@ -477,7 +525,8 @@
       "Matsumoto Castle",
       "Osaka Castle"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 41,
@@ -489,7 +538,9 @@
       "Tanabata",
       "Shichi-Go-San"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 42,
@@ -501,7 +552,8 @@
       "Ryokan",
       "Izakaya"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 43,
@@ -513,7 +565,8 @@
       "Ukiyo-e",
       "Shodo"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 44,
@@ -525,7 +578,8 @@
       "Gyoza",
       "Yakitori"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 45,
@@ -537,7 +591,8 @@
       "Shikoku",
       "Hokkaido"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 46,
@@ -549,7 +604,9 @@
       "Minshuku",
       "Tateyama"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 47,
@@ -561,7 +618,8 @@
       "Philippine Sea",
       "Bering Sea"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 48,
@@ -573,7 +631,8 @@
       "Tonkatsu",
       "Oden"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 49,
@@ -585,7 +644,8 @@
       "Tanabata",
       "Hinamatsuri"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 50,
@@ -597,7 +657,8 @@
       "Nijo Castle",
       "Himeji Castle"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 51,
@@ -609,7 +670,8 @@
       "Sapporo",
       "Kobe"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 52,
@@ -621,7 +683,8 @@
       "Izakaya",
       "Yatai"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 53,
@@ -633,7 +696,8 @@
       "Mount Tate",
       "Mount Haku"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 54,
@@ -645,7 +709,8 @@
       "Asahi",
       "Fuji TV"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 55,
@@ -657,7 +722,9 @@
       "Shikoku",
       "Hokkaido"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 56,
@@ -669,7 +736,8 @@
       "Buckwheat",
       "Seaweed"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 57,
@@ -681,7 +749,9 @@
       "Niigata",
       "Sendai"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 58,
@@ -693,7 +763,8 @@
       "Kodo",
       "Origami"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 59,
@@ -705,7 +776,8 @@
       "Kanazawa",
       "Hiroshima"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 60,
@@ -717,7 +789,8 @@
       "Toriya",
       "Torin"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 61,
@@ -729,7 +802,8 @@
       "Tokyo",
       "Fukuoka"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 62,
@@ -741,7 +815,9 @@
       "Tanabata",
       "Aoi Matsuri"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 63,
@@ -753,7 +829,8 @@
       "Toyama",
       "Nagano"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 64,
@@ -765,7 +842,8 @@
       "Yuan",
       "Ringgit"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 65,
@@ -777,7 +855,9 @@
       "Genmaicha",
       "Sencha"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 66,
@@ -789,7 +869,8 @@
       "Kagura",
       "Kanda Matsuri"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 67,
@@ -801,7 +882,8 @@
       "Shikoku",
       "Kyushu"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 68,
@@ -813,7 +895,9 @@
       "Budo",
       "Shodo"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 69,
@@ -825,7 +909,8 @@
       "Takoyaki",
       "Chankonabe"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 70,
@@ -837,7 +922,8 @@
       "Kobe",
       "Yokohama"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 71,
@@ -849,7 +935,8 @@
       "Kagura",
       "Omikoshi"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 72,
@@ -861,7 +948,8 @@
       "Tohoku",
       "Hokuriku"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 73,
@@ -873,7 +961,8 @@
       "Torii",
       "Goshuin"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 74,
@@ -885,7 +974,8 @@
       "Nara",
       "Matsue"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 75,
@@ -897,7 +987,9 @@
       "Lake Ashi",
       "Lake Shinji"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": false,
+    "completed": true
   },
   {
     "id": 76,
@@ -909,7 +1001,8 @@
       "Ramen",
       "Somem"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 77,
@@ -921,7 +1014,8 @@
       "Uchiwa",
       "Furoshiki"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 78,
@@ -933,7 +1027,8 @@
       "Kanazawa",
       "Matsuyama"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 79,
@@ -945,7 +1040,8 @@
       "Yakitori",
       "Sashimi"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   },
   {
     "id": 80,
@@ -957,6 +1053,7 @@
       "Koto",
       "Fue"
     ],
-    "correctIndex": 0
+    "correctIndex": 0,
+    "issued": true
   }
 ]

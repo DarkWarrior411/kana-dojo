@@ -21,6 +21,9 @@ module.exports = {
       'enhancement',
       'beginner',
       'low hanging fruit',
+      'starter task',
+      'documentation',
+      'frontend'
     ],
     // Label for filtering community issues
     community: 'community',
@@ -214,15 +217,18 @@ module.exports = {
       // Welcome comment posted on freshly created issues for engagement signals
       welcomeComment:
         "👋 **This issue is up for grabs!** Comment below to claim it and get assigned.\n\nNo coding experience needed — just a simple JSON file edit. Check the instructions above and our [Contributing Guide](../blob/main/.github/CONTRIBUTING.md) to get started!\n\nがんばって! 💪",
+      // Reaction added to the welcome comment for additional engagement
+      welcomeCommentReaction: 'heart',
       // Community Contributions milestone number (for issue discoverability)
       milestoneNumber: 1,
       // Common instruction steps (used by buildInstructions)
       steps: {
+        star: 'Star our repo ⭐',
+        fork: 'Fork our repo 🍴',
         addComma: 'Make sure to add a comma after the previous last item',
         save: 'Save the file and commit the changes',
         linkIssue: 'Link this issue using `Closes #<issue_number>`',
-        finalize:
-          'Star our repo ⭐, drink some delicious bubble tea 🍹 and wait for review!',
+        waitForReview: 'Wait for review!',
       },
     },
 
@@ -235,15 +241,21 @@ module.exports = {
      */
     buildInstructions(filePath, itemType, prTitle, overrides = {}) {
       const steps = this.common.steps;
+      const normalizedFilePath = String(filePath).replace(
+        'data/community-content/data/community-content/',
+        'data/community-content/',
+      );
       return [
-        `Open [\`${filePath}\`](../blob/main/${filePath})`,
+        steps.star,
+        steps.fork,
+        `Open [\`${normalizedFilePath}\`](../blob/main/${normalizedFilePath})`,
         overrides.step2 ||
           `Add this ${itemType} to the end of the array (before the closing \`]\`)`,
         overrides.step3 || steps.addComma,
         steps.save,
         `Submit a Pull Request with title: \`${prTitle}\``,
         steps.linkIssue,
-        steps.finalize,
+        steps.waitForReview,
       ];
     },
 

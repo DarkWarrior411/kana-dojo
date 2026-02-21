@@ -736,7 +736,7 @@
     "english": "Are you ready?",
     "game": "Kingdom Hearts",
     "character": "Riku",
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {

@@ -165,15 +165,13 @@ const WordBuildingGame = ({
       romajiToKana,
     } = generateWordDeps;
     const sourceChars = isReverse ? selectedRomaji : selectedKana;
-    const totalTileCount =
-      wordLength <= 1 ? 3 : wordLength === 2 ? 4 : 5;
+    const totalTileCount = wordLength <= 1 ? 3 : wordLength === 2 ? 4 : 5;
     if (sourceChars.length < totalTileCount) {
-      return { wordChars: [], answerChars: [], allTiles: [] };
+      return { wordChars: [], answerChars: [], allTiles: new Map() };
     }
 
     const wordChars: string[] = [];
     const usedChars = new Set<string>();
-
     for (let i = 0; i < wordLength; i++) {
       const available = sourceChars.filter(c => !usedChars.has(c));
       if (available.length === 0) break;
@@ -202,22 +200,27 @@ const WordBuildingGame = ({
       distractors.push(selected);
     }
 
-    const allTiles = [...answerChars, ...distractors].sort(
+    const sortedTiles = [...answerChars, ...distractors].sort(
       () => random.real(0, 1) - 0.5,
     );
+
+    const allTiles = new Map<number, string>();
+    sortedTiles.forEach((char, i) => {
+      allTiles.set(i, char);
+    });
 
     return { wordChars, answerChars, allTiles };
   }, [generateWordDeps]);
 
   const [wordData, setWordData] = useState(() => generateWord());
-  const [placedTiles, setPlacedTiles] = useState<string[]>([]);
+  const [placedTileIds, setPlacedTileIds] = useState<number[]>([]);
   const [isChecking, setIsChecking] = useState(false);
   const [isCelebrating, setIsCelebrating] = useState(false);
 
   const resetGame = useCallback(() => {
     const newWord = generateWord();
     setWordData(newWord);
-    setPlacedTiles([]);
+    setPlacedTileIds([]);
     setIsChecking(false);
     setIsCelebrating(false);
     setBottomBarState('check');
@@ -244,7 +247,7 @@ const WordBuildingGame = ({
 
   // Handle Check button
   const handleCheck = useCallback(() => {
-    if (placedTiles.length === 0) return;
+    if (placedTileIds.length === 0) return;
 
     // Stop timing and record answer time
     speedStopwatch.pause();
@@ -253,9 +256,14 @@ const WordBuildingGame = ({
     playClick();
     setIsChecking(true);
 
-    const isCorrect =
-      placedTiles.length === wordData.answerChars.length &&
-      placedTiles.every((tile, i) => tile === wordData.answerChars[i]);
+    let isCorrect = false;
+
+    if (placedTileIds.length === wordData.answerChars.length) {
+      const placedArray = placedTileIds.map(id => wordData.allTiles.get(id) ?? '');
+      isCorrect = placedArray.every(
+        (tile, i) => tile === wordData.answerChars[i],
+      );
+    }
 
     if (isCorrect) {
       // Record answer time for speed achievements
@@ -315,7 +323,7 @@ const WordBuildingGame = ({
       externalOnWrong?.();
     }
   }, [
-    placedTiles,
+    placedTileIds,
     wordData,
     playClick,
     playCorrect,
@@ -351,7 +359,7 @@ const WordBuildingGame = ({
   const handleTryAgain = useCallback(() => {
     playClick();
     // Clear placed tiles and reset to check state, but keep the same word
-    setPlacedTiles([]);
+    setPlacedTileIds([]);
     setIsChecking(false);
     setBottomBarState('check');
     // Restart timing for the retry
@@ -362,7 +370,7 @@ const WordBuildingGame = ({
 
   // Handle tile click - add or remove
   const handleTileClick = useCallback(
-    (char: string) => {
+    (id: number, _char: string) => {
       if (isChecking && bottomBarState !== 'wrong') return;
 
       playClick();
@@ -377,20 +385,20 @@ const WordBuildingGame = ({
       }
 
       // Normal tile add/remove logic
-      if (placedTiles.includes(char)) {
-        setPlacedTiles(prev => prev.filter(c => c !== char));
-      } else {
-        setPlacedTiles(prev => [...prev, char]);
-      }
+      setPlacedTileIds(prevIds =>
+        prevIds.includes(id)
+          ? prevIds.filter(tileId => tileId !== id)
+          : [...prevIds, id],
+      );
     },
-    [isChecking, bottomBarState, placedTiles, playClick],
+    [isChecking, bottomBarState, playClick],
   );
   // Note: speedStopwatch deliberately excluded - only calling methods
 
   const handleClearPlaced = useCallback(() => {
     if (isChecking) return;
     playClick();
-    setPlacedTiles([]);
+    setPlacedTileIds([]);
   }, [isChecking, playClick]);
 
   // Not enough characters for word building
@@ -402,7 +410,7 @@ const WordBuildingGame = ({
     return null;
   }
 
-  const canCheck = placedTiles.length > 0 && !isChecking;
+  const canCheck = placedTileIds.length > 0 && !isChecking;
   const showContinue = bottomBarState === 'correct';
   const showTryAgain = bottomBarState === 'wrong';
   const showFeedback = showContinue || showTryAgain;
@@ -451,7 +459,7 @@ const WordBuildingGame = ({
 
           <WordBuildingTilesGrid
             allTiles={wordData.allTiles}
-            placedTiles={placedTiles}
+            placedTileIds={placedTileIds}
             onTileClick={handleTileClick}
             isTileDisabled={isChecking && bottomBarState !== 'wrong'}
             isCelebrating={isCelebrating}

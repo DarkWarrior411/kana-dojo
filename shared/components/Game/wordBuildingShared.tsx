@@ -115,9 +115,10 @@ const tileBaseStyles =
   'relative flex items-center justify-center rounded-3xl px-6 sm:px-8 py-3 border-b-10 transition-all duration-150';
 
 interface TileProps {
-  id: string;
+  id: number;
   char: string;
-  onClick: () => void;
+  onClick: (id: number, char: string) => void;
+  layoutId?: string;
   isDisabled?: boolean;
   sizeClassName?: string;
   lang?: string;
@@ -130,6 +131,7 @@ export const ActiveTile = memo(
     id,
     char,
     onClick,
+    layoutId,
     isDisabled,
     sizeClassName,
     lang,
@@ -138,10 +140,10 @@ export const ActiveTile = memo(
   }: TileProps) => {
     return (
       <motion.button
-        layoutId={id}
+        layoutId={layoutId ?? `${id}-${char}`}
         layout='position'
         type='button'
-        onClick={onClick}
+        onClick={() => onClick(id, char)}
         disabled={isDisabled}
         variants={variants}
         className={clsx(
@@ -163,6 +165,7 @@ export const ActiveTile = memo(
   (prevProps, nextProps) =>
     prevProps.id === nextProps.id &&
     prevProps.char === nextProps.char &&
+    prevProps.layoutId === nextProps.layoutId &&
     prevProps.isDisabled === nextProps.isDisabled &&
     prevProps.onClick === nextProps.onClick &&
     prevProps.sizeClassName === nextProps.sizeClassName &&

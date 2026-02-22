@@ -138,7 +138,7 @@ const VocabWordBuildingGame = ({
           word: '',
           wordObj: null as IVocabObj | null,
           correctAnswer: '',
-          allTiles: [] as string[],
+          allTiles: new Map<number, string>(),
           quizType: currentQuizType,
         };
       }
@@ -154,7 +154,7 @@ const VocabWordBuildingGame = ({
           word: '',
           wordObj: null as IVocabObj | null,
           correctAnswer: '',
-          allTiles: [] as string[],
+          allTiles: new Map<number, string>(),
           quizType: currentQuizType,
         };
       }
@@ -198,9 +198,13 @@ const VocabWordBuildingGame = ({
         .slice(0, distractorCount);
 
       // Shuffle all tiles
-      const allTiles = [correctAnswer, ...distractors].sort(
+      const sortedTiles = [correctAnswer, ...distractors].sort(
         () => random.real(0, 1) - 0.5,
       );
+      const allTiles = new Map<number, string>();
+      sortedTiles.forEach((char, i) => {
+        allTiles.set(i, char);
+      });
 
       return {
         word: selectedWord,
@@ -217,7 +221,7 @@ const VocabWordBuildingGame = ({
   const [questionData, setQuestionData] = useState(() =>
     generateQuestion(quizType),
   );
-  const [placedTiles, setPlacedTiles] = useState<string[]>([]);
+  const [placedTileIds, setPlacedTileIds] = useState<number[]>([]);
   const [isChecking, setIsChecking] = useState(false);
   const [isCelebrating, setIsCelebrating] = useState(false);
   const [displayAnswerSummary, setDisplayAnswerSummary] = useState(false);
@@ -249,7 +253,7 @@ const VocabWordBuildingGame = ({
       const typeToUse = nextQuizType ?? quizType;
       const newQuestion = generateQuestion(typeToUse);
       setQuestionData(newQuestion);
-      setPlacedTiles([]);
+      setPlacedTileIds([]);
       setIsChecking(false);
       setIsCelebrating(false);
       setBottomBarState('check');
@@ -281,7 +285,7 @@ const VocabWordBuildingGame = ({
 
   // Handle Check button
   const handleCheck = useCallback(() => {
-    if (placedTiles.length === 0) return;
+    if (placedTileIds.length === 0) return;
 
     // Debounce: prevent rapid button presses
     const now = Date.now();
@@ -296,8 +300,10 @@ const VocabWordBuildingGame = ({
     setIsChecking(true);
 
     // Correct if exactly one tile placed and it matches the correct answer
+    const selectedTileChar = questionData.allTiles.get(placedTileIds[0]);
     const isCorrect =
-      placedTiles.length === 1 && placedTiles[0] === questionData.correctAnswer;
+      placedTileIds.length === 1 &&
+      selectedTileChar === questionData.correctAnswer;
 
     // Use the word object stored with the question (guaranteed to be correct)
     const selectedWordObj = questionData.wordObj;
@@ -371,7 +377,7 @@ const VocabWordBuildingGame = ({
       externalOnWrong?.();
     }
   }, [
-    placedTiles,
+    placedTileIds,
     questionData,
     playClick,
     playCorrect,
@@ -428,7 +434,7 @@ const VocabWordBuildingGame = ({
     lastActionTimeRef.current = now;
 
     playClick();
-    setPlacedTiles([]);
+    setPlacedTileIds([]);
     setIsChecking(false);
     setBottomBarState('check');
     speedStopwatch.reset();
@@ -437,7 +443,7 @@ const VocabWordBuildingGame = ({
 
   // Handle tile click - add or remove from placed tiles
   const handleTileClick = useCallback(
-    (char: string) => {
+    (id: number, _char: string) => {
       if (isChecking && bottomBarState !== 'wrong') return;
 
       playClick();
@@ -450,14 +456,13 @@ const VocabWordBuildingGame = ({
         speedStopwatch.start();
       }
 
-      // Toggle tile in placed tiles array
-      if (placedTiles.includes(char)) {
-        setPlacedTiles(prev => prev.filter(c => c !== char));
-      } else {
-        setPlacedTiles(prev => [...prev, char]);
-      }
+      setPlacedTileIds(prevIds =>
+        prevIds.includes(id)
+          ? prevIds.filter(tileId => tileId !== id)
+          : [...prevIds, id],
+      );
     },
-    [isChecking, bottomBarState, placedTiles, playClick],
+    [isChecking, bottomBarState, playClick],
   );
 
   // Not enough words
@@ -465,7 +470,7 @@ const VocabWordBuildingGame = ({
     return null;
   }
 
-  const canCheck = placedTiles.length > 0 && !isChecking;
+  const canCheck = placedTileIds.length > 0 && !isChecking;
   const showContinue = bottomBarState === 'correct';
   const showTryAgain = bottomBarState === 'wrong';
 
@@ -568,7 +573,7 @@ const VocabWordBuildingGame = ({
 
             <WordBuildingTilesGrid
               allTiles={questionData.allTiles}
-              placedTiles={placedTiles}
+              placedTileIds={placedTileIds}
               onTileClick={handleTileClick}
               isTileDisabled={isChecking && bottomBarState !== 'wrong'}
               isCelebrating={isCelebrating}

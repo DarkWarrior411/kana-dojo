@@ -227,7 +227,7 @@ module.exports = {
       steps: {
         star: 'Star our repo ⭐',
         fork: 'Fork our repo 🍴',
-        addComma: 'Make sure to add a comma after the previous last item',
+        addComma: 'Add a comma after the previous last entry in the array (so the JSON stays valid)',
         save: 'Save the file and commit the changes',
         linkIssue: 'Link this issue using `Closes #<issue_number>`',
         waitForReview: 'Wait for review!',
@@ -250,9 +250,9 @@ module.exports = {
       return [
         steps.star,
         steps.fork,
-        `Open [\`${normalizedFilePath}\`](../blob/main/${normalizedFilePath})`,
+        `Open [\`${normalizedFilePath}\`](../blob/main/${normalizedFilePath}) in your browser (click the link!)`,
         overrides.step2 ||
-          `Add this ${itemType} to the end of the array (before the closing \`]\`)`,
+          `Scroll to the bottom of the file and paste the following ${itemType} just before the closing \`]\`:`,
         overrides.step3 || steps.addComma,
         steps.save,
         `Submit a Pull Request with title: \`${prTitle}\``,
@@ -297,8 +297,8 @@ module.exports = {
       prTitle: 'feat(theme): add {name} theme',
       // Theme has unique step2 and step3
       step2:
-        'Add this new theme to the end of the array (before the closing `]`)',
-      step3: 'Make sure the JSON stays valid and properly formatted',
+        'Scroll to the bottom of the file and paste the following theme object just before the closing `]`:',
+      step3: 'Make sure the JSON stays valid (add a comma after the previous last entry if needed)',
     },
     fact: {
       title:

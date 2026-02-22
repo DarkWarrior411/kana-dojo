@@ -1,6 +1,6 @@
 [
   {
-    "japanese": "ä¸ƒè»¢å…«å€’",
+    "japanese": "七転八倒",
     "romaji": "Shichiten battou",
     "english": "Seven falls, eight struggles",
     "meaning": "Going through great pain and struggle"
@@ -47,7 +47,6 @@
     "english": "Spilled water will not return to the tray",
     "meaning": "What is done cannot be undone"
   },
-
   {
     "japanese": "石の上にも三年",
     "romaji": "Ishi no ue ni mo sannen",
@@ -721,9 +720,9 @@
     "meaning": "Children resemble their parents"
   },
   {
-  "japanese": "鬼の居ぬ間に洗濯",
-  "romaji": "Oni no inuma ni sentaku",
-  "english": "Do laundry while the ogre is away",
-  "meaning": "Take advantage of someone's absence"
+    "japanese": "鬼の居ぬ間に洗濯",
+    "romaji": "Oni no inuma ni sentaku",
+    "english": "Do laundry while the ogre is away",
+    "meaning": "Take advantage of someone's absence"
   }
 ]

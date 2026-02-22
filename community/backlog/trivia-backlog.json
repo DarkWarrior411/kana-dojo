@@ -729,7 +729,7 @@
   },
   {
     "id": 53,
-    "question": "Which mountain is Japanâ€™s highest peak?",
+    "question": "Which mountain is Japan’s highest peak?",
     "difficulty": "easy",
     "answers": [
       "Mount Fuji",
@@ -743,7 +743,7 @@
   },
   {
     "id": 54,
-    "question": "What is the name of Japanâ€™s national public broadcaster?",
+    "question": "What is the name of Japan’s national public broadcaster?",
     "difficulty": "medium",
     "answers": [
       "NHK",
@@ -883,7 +883,7 @@
   },
   {
     "id": 64,
-    "question": "What is Japanâ€™s currency called?",
+    "question": "What is Japan’s currency called?",
     "difficulty": "easy",
     "answers": [
       "Yen",
@@ -1037,7 +1037,7 @@
   },
   {
     "id": 75,
-    "question": "What is the name of Japanâ€™s largest lake?",
+    "question": "What is the name of Japan’s largest lake?",
     "difficulty": "medium",
     "answers": [
       "Lake Biwa",
@@ -1849,7 +1849,7 @@
   },
   {
     "id": 133,
-    "question": "Which mountain is Japanâ€™s highest peak? (Community variation 53)",
+    "question": "Which mountain is Japan’s highest peak? (Community variation 53)",
     "difficulty": "easy",
     "answers": [
       "Mount Fuji",
@@ -1863,7 +1863,7 @@
   },
   {
     "id": 134,
-    "question": "What is the name of Japanâ€™s national public broadcaster? (Community variation 54)",
+    "question": "What is the name of Japan’s national public broadcaster? (Community variation 54)",
     "difficulty": "medium",
     "answers": [
       "NHK",

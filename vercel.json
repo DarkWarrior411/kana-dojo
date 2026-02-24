@@ -9,6 +9,12 @@
       "maxDuration": 10
     }
   },
+  "crons": [
+    {
+      "path": "/api/trigger-community-issue",
+      "schedule": "7,22,37,52 * * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

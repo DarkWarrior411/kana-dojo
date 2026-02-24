@@ -21,7 +21,7 @@ permissions:
 # Prevent multiple runs from overlapping and causing race conditions
 concurrency:
   group: community-issue-creation
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   create-issue:

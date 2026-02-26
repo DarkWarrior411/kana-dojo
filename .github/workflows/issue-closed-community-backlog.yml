@@ -326,56 +326,35 @@ jobs:
 
             core.setOutput('needs_commit', 'false');
 
-      - name: Commit backlog updates
-        id: commit-backlog
+      - name: Commit backlog updates directly to main
         if: steps.reenable.outputs.needs_commit == 'true'
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.AUTOMATION_PR_TOKEN }}
-          add-paths: |
-            community/backlog/
-          commit-message: 'chore(automation): re-enable closed issue backlog'
-          branch: automation/community-data/closed-${{ github.run_id }}
-          title: 'chore(automation): update community backlog'
-          body: Automated update to community backlog state.
-          base: main
-          delete-branch: true
-
-      - name: Merge backlog PR
-        if: steps.reenable.outputs.needs_commit == 'true'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.AUTOMATION_PR_TOKEN }}
-          script: |
-            const prNumber = Number(process.env.PR_NUMBER);
-            if (!prNumber) {
-              console.log('No PR was created; nothing to merge');
-              return;
-            }
-            async function sleep(ms) { return new Promise(function(resolve) { setTimeout(resolve, ms); }); }
-            const MAX_RETRIES = 10;
-            for (let i = 1; i <= MAX_RETRIES; i += 1) {
-              try {
-                await github.rest.pulls.merge({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  pull_number: prNumber,
-                  merge_method: 'squash'
-                });
-                console.log('Merged backlog PR #' + prNumber);
-                return;
-              } catch (e) {
-                console.log('Merge attempt ' + i + ' failed: ' + e.message);
-                if (e.status === 409) {
-                  try {
-                    await github.rest.pulls.updateBranch({ owner: context.repo.owner, repo: context.repo.repo, pull_number: prNumber });
-                  } catch (updateErr) {
-                    console.log('Could not update branch: ' + updateErr.message);
-                  }
-                }
-                if (i < MAX_RETRIES) { await sleep(2000); }
-              }
-            }
-            throw new Error('Failed to merge backlog PR #' + prNumber);
-        env:
-          PR_NUMBER: ${{ steps.commit-backlog.outputs.pull-request-number }}
+        run: |
+          git config user.name "てんとう虫"
+          git config user.email "reservecrate@gmail.com"
+          git add community/backlog/
+          if git diff --cached --quiet; then
+            echo "No backlog changes to commit"
+            exit 0
+          fi
+          commit_msg="chore(automation): re-enable closed issue backlog"
+          max_attempts=5
+          attempt=1
+          while [ "$attempt" -le "$max_attempts" ]; do
+            git commit -m "$commit_msg"
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              echo "Backlog push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Backlog push attempt $attempt failed; retrying..."
+            git rebase --abort || true
+            git fetch origin main
+            git reset --hard origin/main
+            git add community/backlog/
+            if git diff --cached --quiet; then
+              echo "No backlog changes remain after sync"
+              exit 0
+            fi
+            attempt=$((attempt + 1))
+          done
+          echo "Failed to push backlog updates after $max_attempts attempts"
+          exit 1

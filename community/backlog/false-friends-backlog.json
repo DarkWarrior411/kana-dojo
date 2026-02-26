@@ -86,7 +86,7 @@
     "explanation": "Often means sensitive/delicate in Japanese. (Set 1)",
     "example": "彼は意外とナイーブな性格だ。",
     "id": 10,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -311,7 +311,7 @@
     "explanation": "Can mean ranking position in Japanese usage. (Set 2)",
     "example": "彼はチームのナンバー1だ。",
     "id": 35,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -330,7 +330,7 @@
     "example": "会社のイメージが良くなった。",
     "id": 37,
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "termA": "サラリーマン (sarariman)",
@@ -338,7 +338,7 @@
     "explanation": "Refers broadly to office workers. (Set 2)",
     "example": "父は都内でサラリーマンをしている。",
     "id": 38,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -491,7 +491,7 @@
     "explanation": "Can mean ranking position in Japanese usage. (Set 3)",
     "example": "彼はチームのナンバー1だ。",
     "id": 55,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -500,7 +500,7 @@
     "explanation": "Means very energetic mood. (Set 3)",
     "example": "試合前はみんなハイテンションだった。",
     "id": 56,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -617,7 +617,7 @@
     "explanation": "In Japanese it usually means complaint. (Set 4)",
     "example": "お客様からクレームが届いた。",
     "id": 69,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -734,7 +734,7 @@
     "explanation": "マンション means apartment building in Japanese. (Set 5)",
     "example": "駅前のマンションに住んでいます。",
     "id": 82,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -869,7 +869,7 @@
     "explanation": "Often means impression/public image. (Set 5)",
     "example": "会社のイメージが良くなった。",
     "id": 97,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {
@@ -1050,7 +1050,7 @@
     "example": "会社のイメージが良くなった。",
     "id": 117,
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "termA": "サラリーマン (sarariman)",
@@ -1058,7 +1058,7 @@
     "explanation": "Refers broadly to office workers. (Set 6)",
     "example": "父は都内でサラリーマンをしている。",
     "id": 118,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {

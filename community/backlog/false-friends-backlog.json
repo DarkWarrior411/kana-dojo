@@ -510,7 +510,7 @@
     "example": "会社のイメージが良くなった。",
     "id": 57,
     "issued": false,
-    "completed": false
+    "completed": true
   },
   {
     "termA": "サラリーマン (sarariman)",
@@ -518,7 +518,7 @@
     "explanation": "Refers broadly to office workers. (Set 3)",
     "example": "父は都内でサラリーマンをしている。",
     "id": 58,
-    "issued": false,
+    "issued": true,
     "completed": false
   },
   {

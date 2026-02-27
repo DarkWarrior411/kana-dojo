@@ -29,7 +29,9 @@ jobs:
         id: stale-check
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.AUTOMATION_PR_TOKEN }}
+          # Use the workflow-scoped GITHUB_TOKEN for issue mutations.
+          # The external trigger route uses GITHUB_PAT only to dispatch this workflow.
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
             const templates = require('./.github/templates/messages.cjs');

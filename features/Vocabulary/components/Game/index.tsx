@@ -1,7 +1,6 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Return from '@/shared/components/Game/ReturnFromGame';
-import Pick from './Pick';
 import Input from './Input';
 import WordBuildingGame from './WordBuildingGame';
 
@@ -9,6 +8,9 @@ import useVocabStore from '@/features/Vocabulary/store/useVocabStore';
 import { useStatsStore } from '@/features/Progress';
 import { useShallow } from 'zustand/react/shallow';
 import Stats from '@/shared/components/Game/Stats';
+import ClassicSessionSummary from '@/shared/components/Game/ClassicSessionSummary';
+import { useRouter } from '@/core/i18n/routing';
+import { finalizeSession, startSession } from '@/shared/lib/sessionHistory';
 
 const Game = () => {
   const {
@@ -17,6 +19,10 @@ const Game = () => {
     recordDojoUsed,
     recordModeUsed,
     recordChallengeModeUsed,
+    numCorrectAnswers,
+    numWrongAnswers,
+    currentStreak,
+    stars,
   } =
     useStatsStore(
       useShallow(state => ({
@@ -25,11 +31,19 @@ const Game = () => {
         recordDojoUsed: state.recordDojoUsed,
         recordModeUsed: state.recordModeUsed,
         recordChallengeModeUsed: state.recordChallengeModeUsed,
+        numCorrectAnswers: state.numCorrectAnswers,
+        numWrongAnswers: state.numWrongAnswers,
+        currentStreak: state.currentStreak,
+        stars: state.stars,
       })),
     );
 
   const gameMode = useVocabStore(state => state.selectedGameModeVocab);
   const selectedVocabObjs = useVocabStore(state => state.selectedVocabObjs);
+  const router = useRouter();
+  const [view, setView] = useState<'playing' | 'summary'>('playing');
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessionNonce, setSessionNonce] = useState(0);
 
   useEffect(() => {
     resetStats();
@@ -37,27 +51,83 @@ const Game = () => {
     recordDojoUsed('vocabulary');
     recordModeUsed(gameMode.toLowerCase());
     recordChallengeModeUsed('classic');
-  }, []);
+    startSession({
+      sessionType: 'classic',
+      dojoType: 'vocabulary',
+      gameMode: gameMode.toLowerCase(),
+      route: '/vocabulary/train',
+    }).then(setSessionId);
+  }, [
+    sessionNonce,
+    resetStats,
+    recordDojoUsed,
+    recordModeUsed,
+    recordChallengeModeUsed,
+    gameMode,
+  ]);
+
+  const handleQuit = async () => {
+    if (sessionId) {
+      await finalizeSession({
+        sessionId,
+        endedReason: 'manual_quit',
+        endedAbruptly: true,
+        correct: numCorrectAnswers,
+        wrong: numWrongAnswers,
+        bestStreak: currentStreak,
+        stars,
+      });
+    }
+    setView('summary');
+  };
+
+  const handleNewSession = () => {
+    resetStats();
+    setView('playing');
+    setSessionNonce(prev => prev + 1);
+  };
 
   return (
-    <div className='flex min-h-[100dvh] max-w-[100dvw] flex-col items-center gap-4 px-4 md:gap-6'>
-      {showStats && <Stats />}
-      <Return isHidden={showStats} href='/vocabulary' gameMode={gameMode} />
-      {gameMode.toLowerCase() === 'pick' ? (
-        <WordBuildingGame
-          selectedWordObjs={selectedVocabObjs}
+    <>
+      <div
+        key={sessionNonce}
+        className='flex min-h-[100dvh] max-w-[100dvw] flex-col items-center gap-4 px-4 md:gap-6'
+      >
+        {showStats && <Stats />}
+        <Return
           isHidden={showStats}
+          gameMode={gameMode}
+          onQuit={handleQuit}
         />
-      ) : gameMode.toLowerCase() === 'type' ? (
-        <Input selectedWordObjs={selectedVocabObjs} isHidden={showStats} />
-      ) : gameMode.toLowerCase() === 'anti-type' ? (
-        <Input
-          selectedWordObjs={selectedVocabObjs}
-          isHidden={showStats}
-          isReverse={true}
+        {gameMode.toLowerCase() === 'pick' ? (
+          <WordBuildingGame
+            selectedWordObjs={selectedVocabObjs}
+            isHidden={showStats || view !== 'playing'}
+          />
+        ) : gameMode.toLowerCase() === 'type' ? (
+          <Input
+            selectedWordObjs={selectedVocabObjs}
+            isHidden={showStats || view !== 'playing'}
+          />
+        ) : gameMode.toLowerCase() === 'anti-type' ? (
+          <Input
+            selectedWordObjs={selectedVocabObjs}
+            isHidden={showStats || view !== 'playing'}
+            isReverse={true}
+          />
+        ) : null}
+      </div>
+      {view === 'summary' && (
+        <ClassicSessionSummary
+          correct={numCorrectAnswers}
+          wrong={numWrongAnswers}
+          bestStreak={currentStreak}
+          stars={stars}
+          onNewSession={handleNewSession}
+          onBackToSelection={() => router.push('/vocabulary')}
         />
-      ) : null}
-    </div>
+      )}
+    </>
   );
 };
 

@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import clsx from 'clsx';
-import { Link } from '@/core/i18n/routing';
 import { useClick } from '@/shared/hooks/useAudio';
 import { useStopwatch } from 'react-timer-hook';
 import { useStatsDisplay } from '@/features/Progress';
@@ -44,13 +43,13 @@ const StatItem = ({ icon: Icon, value }: StatItemProps) => (
 
 interface ReturnProps {
   isHidden: boolean;
-  href: string;
   gameMode: string;
+  onQuit: () => void;
 }
 
-const Return = ({ isHidden, href, gameMode }: ReturnProps) => {
+const Return = ({ isHidden, gameMode, onQuit }: ReturnProps) => {
   const totalTimeStopwatch = useStopwatch({ autoStart: false });
-  const buttonRef = useRef<HTMLAnchorElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const stats = useStatsDisplay();
   const saveSession = stats.saveSession;
@@ -66,7 +65,7 @@ const Return = ({ isHidden, href, gameMode }: ReturnProps) => {
   // Start stopwatch when component becomes visible
   useEffect(() => {
     if (!isHidden) totalTimeStopwatch.start();
-  }, [isHidden]);
+  }, [isHidden, totalTimeStopwatch]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -82,6 +81,7 @@ const Return = ({ isHidden, href, gameMode }: ReturnProps) => {
     totalTimeStopwatch.pause();
     setNewTotalMilliseconds(totalTimeStopwatch.totalMilliseconds);
     saveSession();
+    onQuit();
   };
 
   const handleShowStats = () => {
@@ -104,12 +104,12 @@ const Return = ({ isHidden, href, gameMode }: ReturnProps) => {
     >
       {/* Header with exit and progress */}
       <div className='flex w-full flex-row items-center justify-between gap-3 md:gap-4'>
-        <Link href={href} ref={buttonRef} onClick={handleExit}>
+        <button type='button' ref={buttonRef} onClick={handleExit}>
           <X
             size={32}
             className='text-(--border-color) duration-250 hover:scale-125 hover:cursor-pointer hover:text-(--secondary-color)'
           />
-        </Link>
+        </button>
         <ProgressBar />
         {/* Stats button - visible only on small screens */}
         <ActionButton

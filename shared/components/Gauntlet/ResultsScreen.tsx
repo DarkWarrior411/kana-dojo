@@ -26,6 +26,7 @@ interface ResultsScreenProps {
   dojoType: 'kana' | 'kanji' | 'vocabulary';
   stats: Omit<GauntletSessionStats, 'id'>;
   isNewBest: boolean;
+  endedReason?: 'completed' | 'failed' | 'manual_quit';
   onRestart: () => void;
   onChangeSettings: () => void;
 }
@@ -34,6 +35,7 @@ export default function ResultsScreen({
   dojoType,
   stats,
   isNewBest,
+  endedReason = stats.completed ? 'completed' : 'failed',
   onRestart,
   onChangeSettings,
 }: ResultsScreenProps) {
@@ -41,7 +43,7 @@ export default function ResultsScreen({
   const [showCharacterBreakdown, setShowCharacterBreakdown] = useState(false);
   const [previousBest, setPreviousBest] = useState<number | null>(null);
 
-  const isVictory = stats.completed;
+  const isVictory = endedReason === 'completed';
   const difficultyConfig = DIFFICULTY_CONFIG[stats.difficulty];
 
   // Trigger confetti on victory (keeping this as it's celebratory, not UI animation)
@@ -127,14 +129,16 @@ export default function ResultsScreen({
                 className='mx-auto text-(--secondary-color)'
               />
               <h1 className='mt-4 text-3xl font-bold text-(--secondary-color)'>
-                Game Over
+                {endedReason === 'manual_quit' ? 'Session Ended' : 'Game Over'}
               </h1>
               <p className='mt-2 text-(--muted-color)'>
-                You got{' '}
-                {Math.round(
-                  (stats.questionsCompleted / stats.totalQuestions) * 100,
-                )}
-                % through the gauntlet
+                {endedReason === 'manual_quit'
+                  ? `You ended this run early at ${Math.round(
+                      (stats.questionsCompleted / stats.totalQuestions) * 100,
+                    )}%.`
+                  : `You got ${Math.round(
+                      (stats.questionsCompleted / stats.totalQuestions) * 100,
+                    )}% through the gauntlet`}
               </p>
             </>
           )}

@@ -25,6 +25,7 @@ interface ResultsScreenProps {
   showGoalTimers: boolean;
   goals: GoalTimer[];
   onRestart: () => void;
+  endedReason?: 'completed' | 'manual_quit';
 }
 
 export default function ResultsScreen({
@@ -34,6 +35,7 @@ export default function ResultsScreen({
   showGoalTimers,
   goals,
   onRestart,
+  endedReason = 'completed',
 }: ResultsScreenProps) {
   const { playClick } = useClick();
 
@@ -53,7 +55,10 @@ export default function ResultsScreen({
       <div className='flex min-h-[100dvh] flex-col items-center justify-center p-4'>
         <div className='max-h-[90vh] w-full max-w-2xl space-y-6 overflow-y-auto'>
           {/* Header */}
-          <ResultsHeader challengeDuration={challengeDuration} />
+          <ResultsHeader
+            challengeDuration={challengeDuration}
+            endedReason={endedReason}
+          />
 
           {/* Main Stats Grid */}
           <MainStatsGrid
@@ -126,22 +131,27 @@ export default function ResultsScreen({
 
 // Sub-components
 
-function ResultsHeader({ challengeDuration }: { challengeDuration: number }) {
+function ResultsHeader({
+  challengeDuration,
+  endedReason,
+}: {
+  challengeDuration: number;
+  endedReason: 'completed' | 'manual_quit';
+}) {
   return (
     <div className='space-y-2 text-center'>
       <div className='mb-4 inline-flex h-20 w-20 items-center justify-center rounded-full bg-(--main-color)/10'>
         <Timer size={48} className='text-(--main-color)' />
       </div>
       <h1 className='text-3xl font-bold text-(--secondary-color)'>
-        Challenge Complete!
+        {endedReason === 'completed' ? 'Challenge Complete!' : 'Session Ended'}
       </h1>
       <p className='text-(--muted-color)'>
-        {challengeDuration < 60
-          ? `${challengeDuration} seconds`
-          : `${challengeDuration / 60} minute${
+        {endedReason === 'completed'
+          ? `${challengeDuration < 60 ? `${challengeDuration} seconds` : `${challengeDuration / 60} minute${
               challengeDuration > 60 ? 's' : ''
-            }`}{' '}
-        challenge finished
+            }`} challenge finished`
+          : 'You quit this blitz session early.'}
       </p>
     </div>
   );

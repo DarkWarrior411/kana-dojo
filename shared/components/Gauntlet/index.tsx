@@ -237,11 +237,31 @@ export default function Gauntlet<T>({ config, onCancel }: GauntletProps<T>) {
     'completed' | 'failed' | 'manual_quit'
   >('completed');
   const sessionIdRef = useRef<string | null>(null);
+  const sessionStartPromiseRef = useRef<Promise<string> | null>(null);
   const finalizedRef = useRef(false);
 
   const pickModeSupported = !!(generateOptions && getCorrectOption);
   // Gauntlet mode always uses normal mode (never reverse)
   const isReverseActive = false;
+
+  const ensureSessionId = useCallback(async (): Promise<string> => {
+    if (sessionIdRef.current) return sessionIdRef.current;
+    if (sessionStartPromiseRef.current) {
+      const id = await sessionStartPromiseRef.current;
+      sessionIdRef.current = id;
+      return id;
+    }
+    const id = await startSession({
+      sessionType: 'gauntlet',
+      dojoType,
+      gameMode: gameMode.toLowerCase(),
+      selectedSets: selectedSets || [],
+      selectedCount: items.length,
+      route: pathname || '',
+    });
+    sessionIdRef.current = id;
+    return id;
+  }, [dojoType, gameMode, selectedSets, items.length, pathname]);
 
   const totalQuestions = items.length * repetitions;
   const currentQuestion = questionQueue[currentIndex] || null;
@@ -306,14 +326,15 @@ export default function Gauntlet<T>({ config, onCancel }: GauntletProps<T>) {
       generateShuffledOptions(queue[0].item);
     }
 
-    startSession({
+    sessionStartPromiseRef.current = startSession({
       sessionType: 'gauntlet',
       dojoType,
       gameMode: gameMode.toLowerCase(),
       selectedSets: selectedSets || [],
       selectedCount: items.length,
       route: pathname || '',
-    }).then(id => {
+    });
+    sessionStartPromiseRef.current.then(id => {
       sessionIdRef.current = id;
     });
 
@@ -441,10 +462,11 @@ export default function Gauntlet<T>({ config, onCancel }: GauntletProps<T>) {
       const { isNewBest: newBest } = await saveSession(stats);
       setIsNewBest(newBest);
 
-      if (!finalizedRef.current && sessionIdRef.current) {
+      if (!finalizedRef.current) {
         finalizedRef.current = true;
+        const sessionId = await ensureSessionId();
         await finalizeSession({
-          sessionId: sessionIdRef.current,
+          sessionId,
           endedReason:
             actualEndedReason === 'manual_quit'
               ? 'manual_quit'
@@ -495,6 +517,7 @@ export default function Gauntlet<T>({ config, onCancel }: GauntletProps<T>) {
       items.length,
       repetitions,
       selectedSets,
+      ensureSessionId,
     ],
   );
 

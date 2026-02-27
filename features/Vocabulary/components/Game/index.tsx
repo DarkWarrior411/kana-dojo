@@ -57,32 +57,34 @@ const Game = () => {
       gameMode: gameMode.toLowerCase(),
       route: '/vocabulary/train',
     }).then(setSessionId);
-  }, [
-    sessionNonce,
-    resetStats,
-    recordDojoUsed,
-    recordModeUsed,
-    recordChallengeModeUsed,
-    gameMode,
-  ]);
+    // Intentionally keyed by nonce only to avoid resetting a live session.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionNonce]);
 
   const handleQuit = async () => {
-    if (sessionId) {
-      await finalizeSession({
-        sessionId,
-        endedReason: 'manual_quit',
-        endedAbruptly: true,
-        correct: numCorrectAnswers,
-        wrong: numWrongAnswers,
-        bestStreak: currentStreak,
-        stars,
-      });
-    }
+    const id =
+      sessionId ??
+      (await startSession({
+        sessionType: 'classic',
+        dojoType: 'vocabulary',
+        gameMode: gameMode.toLowerCase(),
+        route: '/vocabulary/train',
+      }));
+    await finalizeSession({
+      sessionId: id,
+      endedReason: 'manual_quit',
+      endedAbruptly: true,
+      correct: numCorrectAnswers,
+      wrong: numWrongAnswers,
+      bestStreak: currentStreak,
+      stars,
+    });
     setView('summary');
   };
 
   const handleNewSession = () => {
     resetStats();
+    setSessionId(null);
     setView('playing');
     setSessionNonce(prev => prev + 1);
   };

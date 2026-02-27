@@ -106,6 +106,7 @@ export default function Blitz<T>({ config }: BlitzProps<T>) {
   const [showGoalTimers, setShowGoalTimers] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const sessionIdRef = useRef<string | null>(null);
+  const sessionStartPromiseRef = useRef<Promise<string> | null>(null);
   const finalizedRef = useRef(false);
 
   const [isBlitzBooting, setIsBlitzBooting] = useState(() => isBlitzRoute);
@@ -172,14 +173,15 @@ export default function Blitz<T>({ config }: BlitzProps<T>) {
     goalTimers.resetGoals();
     resetTimer();
     startTimer();
-    startSession({
+    sessionStartPromiseRef.current = startSession({
       sessionType: 'blitz',
       dojoType,
       gameMode: gameMode.toLowerCase(),
       selectedSets: selectedSets || [],
       selectedCount: items.length,
       route: pathname || '',
-    }).then(id => {
+    });
+    sessionStartPromiseRef.current.then(id => {
       sessionIdRef.current = id;
     });
     setIsBlitzBooting(false);
@@ -218,6 +220,25 @@ export default function Blitz<T>({ config }: BlitzProps<T>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuestion, gameMode, isReverseActive]);
 
+  const ensureSessionId = useCallback(async (): Promise<string> => {
+    if (sessionIdRef.current) return sessionIdRef.current;
+    if (sessionStartPromiseRef.current) {
+      const id = await sessionStartPromiseRef.current;
+      sessionIdRef.current = id;
+      return id;
+    }
+    const id = await startSession({
+      sessionType: 'blitz',
+      dojoType,
+      gameMode: gameMode.toLowerCase(),
+      selectedSets: selectedSets || [],
+      selectedCount: items.length,
+      route: pathname || '',
+    });
+    sessionIdRef.current = id;
+    return id;
+  }, [dojoType, gameMode, selectedSets, items.length, pathname]);
+
   // Handle timer end
   useEffect(() => {
     if (timeLeft === 0 && !isFinished) {
@@ -231,21 +252,24 @@ export default function Blitz<T>({ config }: BlitzProps<T>) {
         correctAnswers: stats.correct,
         wrongAnswers: stats.wrong,
       });
-      if (!finalizedRef.current && sessionIdRef.current) {
+      if (!finalizedRef.current) {
         finalizedRef.current = true;
-        void finalizeSession({
-          sessionId: sessionIdRef.current,
-          endedReason: 'completed',
-          endedAbruptly: false,
-          correct: stats.correct,
-          wrong: stats.wrong,
-          bestStreak: stats.bestStreak,
-          modePayload: {
-            challengeDuration,
-            showGoalTimers,
-            goals: goalTimers.goals,
-          },
-        });
+        void (async () => {
+          const sessionId = await ensureSessionId();
+          await finalizeSession({
+            sessionId,
+            endedReason: 'completed',
+            endedAbruptly: false,
+            correct: stats.correct,
+            wrong: stats.wrong,
+            bestStreak: stats.bestStreak,
+            modePayload: {
+              challengeDuration,
+              showGoalTimers,
+              goals: goalTimers.goals,
+            },
+          });
+        })();
       }
     }
   }, [
@@ -257,6 +281,7 @@ export default function Blitz<T>({ config }: BlitzProps<T>) {
     stats.correct,
     stats.wrong,
     timeLeft,
+    ensureSessionId,
   ]);
 
   // Track challenge mode usage on mount
@@ -295,14 +320,15 @@ export default function Blitz<T>({ config }: BlitzProps<T>) {
     goalTimers.resetGoals();
     resetTimer();
     setTimeout(() => startTimer(), 50);
-    startSession({
+    sessionStartPromiseRef.current = startSession({
       sessionType: 'blitz',
       dojoType,
       gameMode: gameMode.toLowerCase(),
       selectedSets: selectedSets || [],
       selectedCount: items.length,
       route: pathname || '',
-    }).then(id => {
+    });
+    sessionStartPromiseRef.current.then(id => {
       sessionIdRef.current = id;
     });
     setTimeout(() => {
@@ -318,10 +344,11 @@ export default function Blitz<T>({ config }: BlitzProps<T>) {
 
   const handleCancel = async () => {
     playClick();
-    if (!finalizedRef.current && sessionIdRef.current) {
+    if (!finalizedRef.current) {
       finalizedRef.current = true;
+      const sessionId = await ensureSessionId();
       await finalizeSession({
-        sessionId: sessionIdRef.current,
+        sessionId,
         endedReason: 'manual_quit',
         endedAbruptly: true,
         correct: stats.correct,
